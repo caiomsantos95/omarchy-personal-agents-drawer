@@ -3,7 +3,7 @@
 #
 # Chromium starts it for each message from the extension. It accepts exactly
 # one whitelisted command for a whitelisted agent, relays it to the Hyprland
-# side (agents_drawer in ~/.config/hypr/agents-drawer.lua) and exits. Nothing
+# side (agents_drawer, loaded from the plugin's hypr/agents-drawer.lua) and exits. Nothing
 # from the message is ever passed through unchecked.
 import json
 import os

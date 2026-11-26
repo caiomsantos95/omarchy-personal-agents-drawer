@@ -4,13 +4,16 @@ import qs.Commons as Commons
 import qs.Ui
 
 // The bar button for Personal Agents Drawer. The drawer itself is Hyprland +
-// Chromium (see README); this only toggles it through the launcher.
+// Chromium, set up by Service.qml (see README); this only toggles it through
+// the launcher.
 BarWidget {
   id: root
   moduleName: "io.github.caiomsantos95.personal-agents-drawer"
 
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
+
+  readonly property string launcher: decodeURIComponent(String(Qt.resolvedUrl("bin/agents-drawer")).replace(/^file:\/\//, ""))
 
   Commons.Translations { id: strings; directory: Qt.resolvedUrl("i18n") }
 
@@ -22,7 +25,7 @@ BarWidget {
     slotSize: Style.bar.statusSlot
     tooltipText: strings.t("tooltip")
     onPressed: function(b) {
-      if (root.bar) root.bar.run("agents-drawer toggle")
+      if (root.bar) root.bar.run("'" + root.launcher.replace(/'/g, "'\\''") + "' toggle")
     }
   }
 }

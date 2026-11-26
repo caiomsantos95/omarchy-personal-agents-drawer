@@ -48,31 +48,35 @@ Hyprland 0.56) and Chromium.
 
 ```sh
 omarchy plugin add https://github.com/caiomsantos95/omarchy-personal-agents-drawer.git --enable
-~/.config/omarchy/plugins/io.github.caiomsantos95.personal-agents-drawer/install.sh
 ```
 
-The first command installs the bar button. The second sets up the drawer
-itself; it is a plain shell script, so read it first. It installs:
+That is all. The plugin adds the bar button and a small shell service that
+sets up the rest on its own the first time it starts:
 
 | What | Where |
 | --- | --- |
-| Launcher | `~/.local/bin/agents-drawer` |
 | Chromium extension (home page, agent tabs, theme cover) | `~/.local/share/agents-drawer/extension/` |
-| Native messaging host | `~/.local/share/agents-drawer/host.py` |
-| Agent list | `~/.local/share/agents-drawer/agents.json` |
-| Hyprland module, required from `hyprland.lua` (backed up first) | `~/.config/hypr/agents-drawer.lua` |
-| Theme and font hooks | `~/.config/omarchy/hooks/{theme-set,font-set}.d/agents-drawer-theme` |
+| Native messaging host and agent list | `~/.local/share/agents-drawer/` |
+| The drawer's own browser profile | `~/.local/share/agents-drawer/profile/` |
 
-Then press `Super + D`, click an agent's logo and sign in once. The drawer
-has its own browser profile (`~/.local/share/agents-drawer/profile/`), so it
-stays signed in and never touches your main browser.
+It does not touch `hyprland.lua`: the Hyprland side is loaded at runtime with
+`hyprctl eval`. Press `Super + D`, click an agent's logo and sign in once. The
+drawer's profile stays signed in and never touches your main browser.
 
-Re-run `install.sh` after updating the plugin. To remove everything:
+`omarchy plugin update` updates it; the service applies the new version on
+the next shell start. To remove it:
 
 ```sh
-~/.config/omarchy/plugins/io.github.caiomsantos95.personal-agents-drawer/uninstall.sh   # --purge also deletes the sign-ins
 omarchy plugin remove io.github.caiomsantos95.personal-agents-drawer
+rm -rf ~/.local/share/agents-drawer   # optional: also deletes the sign-ins
 ```
+
+Removing the plugin quits the drawer browser and unloads its Hyprland side.
+
+> **Upgrading from 0.2 or earlier**, which used an `install.sh`: the first
+> start of 0.3 removes the old launcher and theme hooks and turns
+> `~/.config/hypr/agents-drawer.lua` into an empty stub. You can then delete
+> that file and the `require("hypr.agents-drawer")` line in `hyprland.lua`.
 
 ## How it works
 
@@ -84,11 +88,16 @@ omarchy plugin remove io.github.caiomsantos95.personal-agents-drawer
 - **Header and home page.** A small Chromium extension draws the header and
   the home page, and keeps which agents are on. Clicking a logo goes through
   a native messaging host to Hyprland, which raises that agent's window.
+- **Shell service.** `Service.qml` runs inside the Omarchy shell. At start
+  it runs `bin/agents-drawer prepare` (copies the extension and host into
+  `~/.local/share/agents-drawer/` when the plugin changed), loads
+  `hypr/agents-drawer.lua` into Hyprland with `hyprctl eval` (again after
+  every config reload, which clears it) and starts the drawer browser hidden.
 - **Theme.** `agents-drawer theme` turns the current theme's `colors.toml`
   and monospace font into CSS variables. The extension injects them into each
   agent's page with a small per-site file (`browser/extension/sites/`) that maps the
-  site's own design tokens onto them. Omarchy's theme and font hooks rerun it,
-  and the pages pick the change up within a few seconds.
+  site's own design tokens onto them. The service reruns it when the theme or
+  font changes, and the pages pick the change up within a few seconds.
 - **Edge and clicks.** A 75 ms timer inside Hyprland watches for the pointer
   resting on a right screen edge, and a pass-through left-click binding closes
   the drawer when the click lands outside it. Focus follows the mouse in
@@ -108,9 +117,11 @@ Omarchy plugins run unsandboxed, so here is everything this one does:
   Only the drawer's extension may call it.
 - The launcher opens agents by id, from the list, never a URL it is handed.
   `agents-drawer build` accepts only plain `https://` addresses.
-- `install.sh` edits one file outside its own folders: it appends one
-  `require` line to `~/.config/hypr/hyprland.lua`, after making a backup.
-  `uninstall.sh` removes it.
+- It writes only to `~/.local/share/agents-drawer/`. It never edits your
+  Hyprland config; its Hyprland module lives in memory and is gone after a
+  reload once the plugin is removed. The one exception is upgrading from 0.2
+  or earlier (see above), which removes the files that version's
+  `install.sh` created.
 - Nothing needs root.
 - `AGENTS_DRAWER_DEBUG=1 agents-drawer start` opens Chromium's DevTools port
   on localhost for working on site themes. While that is on, any program on
@@ -139,7 +150,8 @@ Any agent with a web app works. Put it in `~/.config/agents-drawer/agents.json`:
 ]
 ```
 
-and run `agents-drawer build`. It shows up on the home page; click it and
+and save. The plugin notices and applies it (restarting the drawer browser);
+it shows up on the home page; click it and
 sign in. Entries with the id of a shipped agent replace it, and
 `{ "id": "dots", "disabled": true }` hides one. Optional fields: `label`
 (the short name under the logo), `hosts` (extra domains the app lives on),

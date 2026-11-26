@@ -4,10 +4,13 @@
 # Your agents' web apps (Claude Duet, Muse, ChatGPT Dots, ...)
 # run as pre-rendered Chromium app windows in their own browser profile,
 # stacked by Hyprland in the special:agents workspace, which slides in from
-# the right edge over any workspace. Hyprland side:
-# ~/.config/hypr/agents-drawer.lua.
+# the right edge over any workspace. The plugin's Service.qml runs this and
+# loads the Hyprland side (hypr/agents-drawer.lua) at runtime; nothing here
+# needs to be run by hand.
 #
 #   agents-drawer toggle     show or hide the drawer
+#   agents-drawer prepare    copy the extension and native host into place and
+#                            apply the agent list, when the plugin changed
 #   agents-drawer start      start the drawer browser (hidden) if it is not running
 #   agents-drawer stop       quit the drawer browser
 #   agents-drawer app <id>   open an agent as an app window in the drawer browser
@@ -22,6 +25,7 @@
 
 set -euo pipefail
 
+SRC="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
 DATA="${XDG_DATA_HOME:-$HOME/.local/share}/agents-drawer"
 PROFILE="$DATA/profile"
 EXT="$DATA/extension"
@@ -236,6 +240,71 @@ print("agents: " + ", ".join(a["id"] for a in resolved))
 PY
 }
 
+# Copy what Chromium needs a writable or stable copy of (the extension, which
+# `build` and `theme` write into, and the native host, which reads the
+# resolved agent list next to itself) out of the plugin folder, whenever the
+# plugin's files changed since the last time. Runs on every shell start.
+prepare() {
+  local cmd
+  for cmd in chromium hyprctl python3 uwsm-app; do
+    command -v "$cmd" >/dev/null || { echo "agents-drawer: missing $cmd (needs Omarchy with Chromium)" >&2; return 1; }
+  done
+  python3 -c 'import tomllib' 2>/dev/null || { echo "agents-drawer: needs Python 3.11 or newer" >&2; return 1; }
+
+  local stamp="$DATA/.source" sum
+  sum=$(cd "$SRC" && find browser/extension host agents.json -type f ! -name theme.css ! -name agents.js -print0 \
+    | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-16)
+  if [[ -d $EXT && $(cat "$stamp" 2>/dev/null) == "$sum" ]]; then
+    return 0
+  fi
+
+  mkdir -p "$DATA"
+  rm -rf "$DATA/extension.new"
+  cp -r "$SRC/browser/extension" "$DATA/extension.new"
+  rm -f "$DATA/extension.new/theme.css" "$DATA/extension.new/agents.js"
+  rm -rf "$EXT"
+  mv "$DATA/extension.new" "$EXT"
+  install -m 755 "$SRC/host/agents-drawer-host.py" "$DATA/host.py"
+  install -m 644 "$SRC/agents.json" "$DATA/agents.json"
+  register
+  theme
+  build >/dev/null
+  printf '%s\n' "$sum" >"$stamp"
+  retire_legacy
+  # A running drawer browser still has the old extension loaded, and a loaded
+  # Hyprland module the old agent list; the reload makes Service.qml load it
+  # again.
+  if running; then
+    "$0" stop
+  fi
+  hyprctl reload >/dev/null 2>&1 || true
+}
+
+# Versions before 0.3 were set up by an install.sh that put a launcher in
+# ~/.local/bin, theme hooks in ~/.config/omarchy/hooks and a Hyprland module
+# required from hyprland.lua. The plugin does all of that itself now. The
+# require line is left alone (this never edits hyprland.lua); the module it
+# loads becomes an empty stub so the drawer is not set up twice.
+retire_legacy() {
+  local config="${XDG_CONFIG_HOME:-$HOME/.config}" legacy=0
+  local hooks="$config/omarchy/hooks"
+  if [[ -f $config/hypr/agents-drawer.lua ]] && ! grep -q 'legacy stub' "$config/hypr/agents-drawer.lua"; then
+    cat >"$config/hypr/agents-drawer.lua" <<'LUA'
+-- Personal Agents Drawer legacy stub. The plugin loads its Hyprland module
+-- itself since 0.3. Delete this file together with the
+-- require("hypr.agents-drawer") line in hyprland.lua.
+LUA
+    legacy=1
+  fi
+  rm -f "$hooks/theme-set.d/agents-drawer-theme" "$hooks/font-set.d/agents-drawer-theme"
+  if [[ -L $HOME/.local/bin/agents-drawer || -f $HOME/.local/bin/agents-drawer ]] && grep -q 'Personal Agents Drawer' "$HOME/.local/bin/agents-drawer" 2>/dev/null; then
+    rm -f "$HOME/.local/bin/agents-drawer"
+  fi
+  if ((legacy)); then
+    notify "Personal Agents Drawer" "Updated. You can delete the require(\"hypr.agents-drawer\") line in hyprland.lua; it is no longer needed."
+  fi
+}
+
 # Start clean every time: no "restore pages?" bubble and no reopened windows.
 reset_session() {
   local prefs="$PROFILE/Default/Preferences"
@@ -290,13 +359,13 @@ launch() {
 case "${1:-toggle}" in
 toggle)
   if ! hyprctl eval 'agents_drawer.toggle()' >/dev/null 2>&1; then
-    notify "Personal Agents Drawer" "Not set up yet. Run install.sh from the plugin folder."
+    notify "Personal Agents Drawer" "Not running. Enable the plugin with: omarchy plugin enable io.github.caiomsantos95.personal-agents-drawer"
     exit 1
   fi
   ;;
 start)
   if running && window_open; then exit 0; fi
-  [[ -d $EXT ]] || { echo "agents-drawer: not installed (missing $EXT)" >&2; exit 1; }
+  [[ -d $EXT ]] || prepare
   theme || true
   launch "$HOME_URL"
   ;;
@@ -316,6 +385,7 @@ build)
     "$0" start
   fi
   ;;
+prepare) prepare ;;
 stop)
   pkill -f "[-]-user-data-dir=$PROFILE" || true
   for _ in $(seq 50); do running || break; sleep 0.1; done
@@ -324,7 +394,7 @@ theme) theme ;;
 register) register ;;
 id) ext_id ;;
 *)
-  sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'
   exit 1
   ;;
 esac

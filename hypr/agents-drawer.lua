@@ -12,11 +12,24 @@
 -- home window (agent logos header) on top, shrunk to the header while an
 -- agent is showing, and the agent windows under it, the current one raised.
 --
--- Installed by install.sh from the plugin folder; the rest lives in
--- ~/.local/bin/agents-drawer and ~/.local/share/agents-drawer/.
+-- Not part of the Hyprland config: the plugin's Service.qml loads it with
+-- `hyprctl eval` after setting agents_drawer_root to the plugin folder, and
+-- again after every config reload (which starts a fresh Lua state). Its
+-- generated files live in ~/.local/share/agents-drawer/.
+
+if type(agents_drawer_root) ~= "string" then
+  return
+end
 
 agents_drawer = agents_drawer or {}
 local M = agents_drawer
+
+-- Loading twice into the same Lua state would bind everything twice (and the
+-- shortcut would then toggle the drawer open and shut again).
+if M.loaded then
+  return
+end
+M.loaded = true
 
 local NAME = "agents"
 local WS = "special:" .. NAME
@@ -47,7 +60,7 @@ local HEADER_GAP = 4
 local EDGE_TICK_MS = 75
 local EDGE_DWELL_MS = 450
 
-local LAUNCHER = HOME .. "/.local/bin/agents-drawer"
+local LAUNCHER = o.shell_quote(agents_drawer_root .. "/bin/agents-drawer")
 
 -- Which window is showing survives Hyprland config reloads (which start a
 -- fresh Lua state) so it stays in step with the header the extension draws.
