@@ -1,0 +1,4 @@
+#!/bin/bash
+# Omarchy theme-set / font-set hook: retint Personal Agents Drawer.
+[[ -x "$HOME/.local/bin/agents-drawer" ]] && "$HOME/.local/bin/agents-drawer" theme
+exit 0

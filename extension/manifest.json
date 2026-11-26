@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Personal Agents Drawer",
+  "version": "0.1.0",
+  "description": "Home page, agent tabs and an Omarchy-themed terminal cover for the Personal Agents Drawer.",
+  "background": {
+    "service_worker": "sw.js"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "https://claude.ai/*",
+    "https://muse.ai/*",
+    "https://www.muse.ai/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://muse.ai/*",
+        "https://www.muse.ai/*"
+      ],
+      "js": [
+        "chats.js",
+        "keys.js",
+        "cover.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "theme.css",
+        "base.css",
+        "sites/*.css"
+      ],
+      "matches": [
+        "https://claude.ai/*",
+        "https://muse.ai/*",
+        "https://www.muse.ai/*"
+      ]
+    }
+  ]
+}

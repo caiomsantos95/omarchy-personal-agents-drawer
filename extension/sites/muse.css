@@ -1,0 +1,84 @@
+/* Muse (muse.ai): map its dark-mode tokens onto the Omarchy theme. Muse
+   switches palettes with .dark / .dark-elevated and data-accent-color on
+   <html>, so every selector is covered and the values are !important. */
+:root, html.dark, .dark, .dark-elevated, html[data-accent-color] {
+  /* surfaces */
+  --bg-primary: var(--om-background) !important;
+  --bg-secondary: var(--om-background) !important;
+  --chat-background: var(--om-background) !important;
+  --wash: var(--om-dark-background) !important;
+  --fill-primary: var(--om-lighter-background) !important;
+  --fill-secondary: var(--om-lighter-background) !important;
+  --fill-tertiary: var(--om-muted) !important;
+  --fill-task-banner: var(--om-lighter-background) !important;
+  --fill-primary-elevated: rgb(var(--om-foreground-rgb) / 0.06) !important;
+  --fill-secondary-elevated: rgb(var(--om-foreground-rgb) / 0.06) !important;
+  --fill-secondary-elevated-hover: rgb(var(--om-foreground-rgb) / 0.1) !important;
+  --fill-secondary-elevated-pressed: rgb(var(--om-foreground-rgb) / 0.14) !important;
+  --fill-secondary-elevated-sidebar: var(--om-lighter-background) !important;
+  --hatch-onboarding-fill: var(--om-lighter-background) !important;
+  --hatch-onboarding-fill-raised: var(--om-selection) !important;
+  --fill-highlight: rgb(var(--om-accent-rgb) / 0.08) !important;
+  --fill-divider: var(--om-muted) !important;
+  --media-protection-border: var(--om-muted) !important;
+  --fill-outline: var(--om-accent) !important;
+  --fill-blur-thick: rgb(var(--om-dark-background-rgb) / 0.94) !important;
+  --fill-dialog: rgb(var(--om-dark-background-rgb) / 0.96) !important;
+  --fill-dialog-overlay: rgb(var(--om-darker-background-rgb) / 0.7) !important;
+  --fill-code-block: var(--om-darker-background) !important;
+  --code-inline: var(--om-cyan) !important;
+  --scroll-thumb: var(--om-muted) !important;
+  --fill-inverted: var(--om-foreground) !important;
+  --text-on-inverted: var(--om-background) !important;
+
+  /* chat bubbles: the user's in the selection color, the agent's bare,
+     like output in a terminal */
+  --chat-user-bubble: var(--om-selection) !important;
+  --chat-user-text: var(--om-bright-foreground) !important;
+  --chat-agent-bubble: transparent !important;
+  --chat-agent-text: var(--om-foreground) !important;
+  --hatch-agent-bubble-bg: transparent !important;
+
+  /* text and icons */
+  --text-primary: var(--om-foreground) !important;
+  --icon-primary: var(--om-foreground) !important;
+  --text-secondary: var(--om-light-foreground) !important;
+  --icon-secondary: var(--om-light-foreground) !important;
+  --text-secondary-emphasized: var(--om-light-foreground) !important;
+  --icon-secondary-emphasized: var(--om-light-foreground) !important;
+  --text-tertiary: var(--om-dark-foreground) !important;
+  --icon-tertiary: var(--om-dark-foreground) !important;
+  --text-quaternary: var(--om-muted) !important;
+  --icon-quaternary: var(--om-muted) !important;
+  --text-white: var(--om-bright-foreground) !important;
+  --text-primary-link: var(--om-accent) !important;
+  --icon-primary-link: var(--om-accent) !important;
+  --text-destructive: var(--om-red) !important;
+  --icon-destructive: var(--om-red) !important;
+  --text-success: var(--om-green) !important;
+  --icon-success: var(--om-green) !important;
+  --text-warning: var(--om-yellow) !important;
+  --icon-warning: var(--om-yellow) !important;
+  --text-on-accent: var(--om-darker-background) !important;
+
+  /* accent */
+  --accent: var(--om-accent) !important;
+  --accent-dark: var(--om-accent) !important;
+  --accent-foreground: var(--om-darker-background) !important;
+  --fill-blue: var(--om-accent) !important;
+  --hatch-primary-action-background: var(--om-accent) !important;
+  --hatch-primary-action-foreground: var(--om-darker-background) !important;
+  --hatch-destructive-action-background: var(--om-red) !important;
+  --hatch-accent: var(--om-accent) !important;
+  --hatch-accent-hover: var(--om-yellow) !important;
+  --hatch-accent-muted: var(--om-accent) !important;
+  --hatch-accent-bg: rgb(var(--om-accent-rgb) / 0.12) !important;
+  --hatch-accent-bg-solid: var(--om-accent) !important;
+  --hatch-accent-border: rgb(var(--om-accent-rgb) / 0.25) !important;
+  --hatch-accent-btn-bg: rgb(var(--om-accent-rgb) / 0.15) !important;
+  --hatch-accent-btn-bg-hover: rgb(var(--om-accent-rgb) / 0.25) !important;
+  --hatch-accent-btn-border: rgb(var(--om-accent-rgb) / 0.35) !important;
+  --hatch-accent-caret: var(--om-accent) !important;
+  --hatch-accent-gradient-start: var(--om-yellow) !important;
+  --hatch-accent-gradient-end: var(--om-accent) !important;
+}

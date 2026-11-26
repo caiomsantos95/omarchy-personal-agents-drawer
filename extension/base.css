@@ -1,0 +1,19 @@
+/* Terminal skin shared by every chat in the drawer. Site files in sites/
+   map each app's own colors onto the --om-* theme variables. */
+html, body {
+  background: var(--om-background) !important;
+  color: var(--om-foreground) !important;
+  color-scheme: var(--om-mode) !important;
+}
+body, body *:not(svg):not(svg *):not([class*="icon" i]):not([class*="material" i]):not(i) {
+  font-family: var(--om-font) !important;
+  letter-spacing: 0 !important;
+}
+*, *::before, *::after { border-radius: 0 !important; }
+::selection { background: var(--om-selection) !important; color: var(--om-bright-foreground) !important; }
+textarea, input, [contenteditable="true"] {
+  caret-color: var(--om-accent) !important;
+  caret-shape: block;
+}
+* { scrollbar-width: thin; scrollbar-color: var(--om-muted) transparent; }
+a { color: var(--om-blue); }

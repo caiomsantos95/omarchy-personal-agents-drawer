@@ -1,0 +1,114 @@
+/* Claude (claude.ai): map its design-system tokens (--cds-*) onto the
+   Omarchy theme. They are defined on html.cds-root and redefined on inner
+   .cds-dark-scope / .cds-light-scope elements and anything with data-mode,
+   so every one of those is covered and the values are !important. */
+:root, .cds-root, [data-mode], .cds-dark-scope, .cds-light-scope {
+  /* surfaces */
+  --cds-page-bg: var(--om-background) !important;
+  --cds-surface-0: var(--om-darker-background) !important;
+  --cds-surface-1: var(--om-background) !important;
+  --cds-surface-2: var(--om-dark-background) !important;
+  --cds-surface-3: var(--om-dark-background) !important;
+  --cds-surface-panel: var(--om-dark-background) !important;
+  --cds-surface-sidebar: var(--om-dark-background) !important;
+  --cds-surface-popover: var(--om-lighter-background) !important;
+  --cds-tooltip-bg: var(--om-lighter-background) !important;
+  --cds-role-tooltip-bg: var(--om-darker-background) !important;
+  --cds-bg-editor-canvas: var(--om-darker-background) !important;
+  --cds-bg-user-message: var(--om-selection) !important;
+  --cds-bg-neutral: rgb(var(--om-foreground-rgb) / 0.05) !important;
+  --cds-bg-neutral-hover: rgb(var(--om-foreground-rgb) / 0.08) !important;
+  --cds-bg-accent: rgb(var(--om-accent-rgb) / 0.12) !important;
+  --cds-bg-accent-layer: rgb(var(--om-accent-rgb) / 0.06) !important;
+  --cds-bg-accent-muted: rgb(var(--om-accent-rgb) / 0.1) !important;
+  --cds-bg-highlight: rgb(var(--om-yellow-rgb) / 0.3) !important;
+  --cds-skeleton-base: rgb(var(--om-foreground-rgb) / 0.07) !important;
+  --cds-skeleton-sheen: rgb(var(--om-foreground-rgb) / 0.07) !important;
+
+  /* fills */
+  --cds-fill-card: rgb(var(--om-foreground-rgb) / 0.03) !important;
+  --cds-fill-card-hover: rgb(var(--om-foreground-rgb) / 0.05) !important;
+  --cds-fill-field: var(--om-dark-background) !important;
+  --cds-fill-field-ring: var(--om-muted) !important;
+  --cds-fill-control: rgb(var(--om-foreground-rgb) / 0.1) !important;
+  --cds-fill-control-hover: rgb(var(--om-foreground-rgb) / 0.18) !important;
+  --cds-fill-ghost-hover: rgb(var(--om-foreground-rgb) / 0.07) !important;
+  --cds-fill-ghost-selected: var(--om-selection) !important;
+  --cds-fill-button-ghost-hover: rgb(var(--om-foreground-rgb) / 0.07) !important;
+  --cds-fill-button-layer: rgb(var(--om-foreground-rgb) / 0.07) !important;
+  --cds-fill-secondary: rgb(var(--om-foreground-rgb) / 0.14) !important;
+  --cds-fill-secondary-hover: rgb(var(--om-foreground-rgb) / 0.2) !important;
+  --cds-fill-primary: var(--om-foreground) !important;
+  --cds-fill-primary-hover: var(--om-bright-foreground) !important;
+  --cds-on-primary: var(--om-background) !important;
+  --cds-fill-disabled: rgb(var(--om-foreground-rgb) / 0.05) !important;
+
+  /* accent: Claude's blue and its brand orange both become the theme accent */
+  --cds-fill-accent: var(--om-accent) !important;
+  --cds-fill-accent-hover: var(--om-yellow) !important;
+  --cds-role-accent-fill: var(--om-accent) !important;
+  --cds-role-accent-fill-hover: var(--om-yellow) !important;
+  --cds-on-accent: var(--om-darker-background) !important;
+  --cds-role-accent-on: var(--om-darker-background) !important;
+  --cds-fill-brand: var(--om-accent) !important;
+  --cds-fill-brand-hover: var(--om-yellow) !important;
+  --cds-fill-brand-icon-only: var(--om-accent) !important;
+  --cds-on-brand: var(--om-darker-background) !important;
+  --cds-text-accent: var(--om-accent) !important;
+  --cds-border-accent: rgb(var(--om-accent-rgb) / 0.35) !important;
+  --cds-chat-composer-link: var(--om-blue) !important;
+  --cds-chat-composer-link-hover: var(--om-bright-blue) !important;
+  --cds-composer-ring: var(--om-muted) !important;
+  --cds-focus-shadow: inset 0 0 0 1px var(--om-background), 0 0 0 1px var(--om-accent) !important;
+  --cds-focus-shadow--ring: 0 0 0 1px var(--om-accent) !important;
+  --cds-shadow-drop-ring: inset 0 0 0 2px var(--om-accent) !important;
+
+  /* status */
+  --cds-fill-danger: var(--om-red) !important;
+  --cds-role-danger-fill: var(--om-red) !important;
+  --cds-text-danger: var(--om-red) !important;
+  --cds-fill-success: var(--om-green) !important;
+  --cds-role-success-fill: var(--om-green) !important;
+  --cds-text-success: var(--om-green) !important;
+  --cds-fill-warning: var(--om-yellow) !important;
+  --cds-role-warning-fill: var(--om-yellow) !important;
+  --cds-text-warning: var(--om-yellow) !important;
+
+  /* text */
+  --cds-text-primary: var(--om-foreground) !important;
+  --cds-text-secondary: var(--om-light-foreground) !important;
+  --cds-text-stays-secondary: var(--om-light-foreground) !important;
+  --cds-text-muted: var(--om-dark-foreground) !important;
+  --cds-text-disabled: rgb(var(--om-foreground-rgb) / 0.35) !important;
+  --cds-solid-primary: var(--om-foreground) !important;
+  --cds-solid-secondary: var(--om-light-foreground) !important;
+  --cds-solid-muted: var(--om-dark-foreground) !important;
+
+  /* lines */
+  --cds-border: var(--om-muted) !important;
+  --cds-border-line: var(--om-muted) !important;
+  --cds-border-line-muted: rgb(var(--om-muted-rgb) / 0.7) !important;
+  --cds-border-strong: var(--om-dark-foreground) !important;
+  --cds-border-stronger: var(--om-light-foreground) !important;
+  --cds-ring-color: var(--om-muted) !important;
+
+  /* flat, like a terminal */
+  --cds-shadow-sm: none !important;
+  --cds-shadow-md: none !important;
+  --cds-shadow-lg: none !important;
+  --cds-shadow-popover: 0 0 0 1px var(--om-muted) !important;
+
+  /* Claude sets message and UI fonts through its own variables */
+  --font-user-message: var(--om-font) !important;
+  --font-claude-response: var(--om-font) !important;
+  --font-ui: var(--om-font) !important;
+  --font-sans: var(--om-font) !important;
+  --font-serif: var(--om-font) !important;
+}
+
+/* Your messages: Claude paints these bubbles with a fixed brand color
+   (bg-[#...] utilities), so recolor them directly. */
+[data-row-bubble][class*="bg-[#"] {
+  background-color: var(--om-selection) !important;
+  color: var(--om-bright-foreground) !important;
+}
