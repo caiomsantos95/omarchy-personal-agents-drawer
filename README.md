@@ -1,5 +1,7 @@
 # Personal Agents Drawer
 
+[Omarchy plugin marketplace](https://plugins.omarchy.org/plugin.html?id=io.github.caiomsantos95.personal-agents-drawer)
+
 Your personal agents, one keystroke away on [Omarchy](https://omarchy.org).
 
 A drawer slides in from the right edge of the screen, over whatever you are
@@ -26,6 +28,10 @@ your font, background and square corners; a full theme also maps the site's
 own colors.
 
 ![Personal Agents Drawer](preview.png)
+
+![Claude Duet open in the drawer, wearing the Omarchy theme](docs/conversation.png)
+
+<sub>A mockup of the drawer over a workspace, built from the drawer's own theme and header styles; the conversation is illustrative.</sub>
 
 - **`Super + D`** toggles the drawer. So does the `◆` button in the bar.
 - **Rest the pointer on the right edge** of a screen for half a second to open it.
