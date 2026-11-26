@@ -1,0 +1,34 @@
+[
+  {
+    "id": "duet",
+    "name": "Claude Duet",
+    "label": "Claude",
+    "url": "https://claude.ai/duet",
+    "icon": "https://claude.ai/favicon.ico",
+    "theme": "claude.css"
+  },
+  {
+    "id": "muse",
+    "name": "Muse",
+    "label": "Muse",
+    "url": "https://muse.ai/",
+    "hosts": [
+      "muse.ai",
+      "www.muse.ai"
+    ],
+    "icon": "https://muse.ai/favicon.ico",
+    "theme": "muse.css"
+  },
+  {
+    "id": "dots",
+    "name": "ChatGPT Dots",
+    "label": "Dots",
+    "url": "https://chatgpt.com/dots"
+  },
+  {
+    "id": "tasks",
+    "name": "Google Tasks",
+    "label": "Tasks",
+    "url": "https://tasks.google.com/"
+  }
+]

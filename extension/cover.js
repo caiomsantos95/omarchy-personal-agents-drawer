@@ -15,7 +15,7 @@
 
   let last = "";
   async function load() {
-    const css = [await get("theme.css"), await get("base.css"), await get(chat.css)].join("\n");
+    const css = [await get("theme.css"), await get("base.css"), chat.css ? await get(chat.css) : ""].join("\n");
     if (css !== last) style.textContent = last = css;
     attach();
   }

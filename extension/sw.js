@@ -1,4 +1,4 @@
-importScripts("chats.js");
+importScripts("agents.js");
 
 // Each chat is its own Chromium app window; Hyprland stacks them in the
 // drawer (~/.config/hypr/agents-drawer.lua). This worker keeps which chats are
@@ -30,7 +30,10 @@ async function show(app) {
 // Open every enabled chat in the background so the drawer shows a page that
 // is already loaded.
 async function prerender() {
-  for (const id of (await getState()).enabled) await hypr("ensure", id);
+  const s = await getState();
+  for (const id of s.enabled) await hypr("ensure", id);
+  // Line Hyprland's stack up with the header: same agent in front.
+  await hypr("show", s.enabled.includes(s.current) ? s.current : "home");
 }
 
 // Chromium will not open an extension page with --app, so the launcher opens

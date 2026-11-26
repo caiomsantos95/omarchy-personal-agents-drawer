@@ -4,10 +4,21 @@ Your personal agents, one keystroke away on [Omarchy](https://omarchy.org).
 
 A drawer slides in from the right edge of the screen, over whatever you are
 doing, without retiling your windows. Inside are the web apps of your
-personal agents, [Claude Duet](https://claude.ai/duet) and
-[Muse](https://muse.ai), already loaded and signed in, restyled to look like
-the rest of your Omarchy desktop: your theme's colors, your monospace font,
-square corners. Switch themes and the drawer follows.
+personal agents, already loaded and signed in, restyled to look like the rest
+of your Omarchy desktop: your theme's colors, your monospace font, square
+corners. Switch themes and the drawer follows.
+
+| Agent | Web app | Theme |
+| --- | --- | --- |
+| [Claude Duet](https://claude.ai/duet) | `claude.ai/duet` | full |
+| [Muse](https://muse.ai) | `muse.ai` | full |
+| [ChatGPT Dots](https://openai.com/index/introducing-dots/) | `chatgpt.com/dots` | base skin |
+| [Google Tasks](https://tasks.google.com) | `tasks.google.com` | base skin |
+
+Turn agents on and off from the drawer's home page (**+ Add**), and add your
+own in one line (see [Adding an agent](#adding-an-agent)). "Base skin" means
+your font, background and square corners; a full theme also maps the site's
+own colors.
 
 ![Personal Agents Drawer](preview.png)
 
@@ -37,6 +48,7 @@ itself; it is a plain shell script, so read it first. It installs:
 | Launcher | `~/.local/bin/agents-drawer` |
 | Chromium extension (home page, agent tabs, theme cover) | `~/.local/share/agents-drawer/extension/` |
 | Native messaging host | `~/.local/share/agents-drawer/host.py` |
+| Agent list | `~/.local/share/agents-drawer/agents.json` |
 | Hyprland module, required from `hyprland.lua` (backed up first) | `~/.config/hypr/agents-drawer.lua` |
 | Theme and font hooks | `~/.config/omarchy/hooks/{theme-set,font-set}.d/agents-drawer-theme` |
 
@@ -77,13 +89,14 @@ Omarchy plugins run unsandboxed, so here is everything this one does:
 
 - It only talks to the agents' own sites. No analytics, no other network
   access, nothing leaves your machine that the sites would not get anyway.
-- The extension runs only on `claude.ai` and `muse.ai`, and only in the
-  drawer's profile. It changes how the pages look; it does not read your
-  conversations.
+- The extension runs only on the agents' sites (generated from the agent
+  list), and only in the drawer's profile. It changes how the pages look; it
+  does not read your conversations.
 - The native messaging host accepts four fixed commands (`show`, `ensure`,
-  `hide`, `close`) for three fixed agents and passes nothing else on. Only
-  the drawer's extension may call it.
-- The launcher opens only `https://claude.ai/…` and `https://muse.ai/…` URLs.
+  `hide`, `close`) for the agents in the list and passes nothing else on.
+  Only the drawer's extension may call it.
+- The launcher opens agents by id, from the list, never a URL it is handed.
+  `agents-drawer build` accepts only plain `https://` addresses.
 - `install.sh` edits one file outside its own folders: it appends one
   `require` line to `~/.config/hypr/hyprland.lua`, after making a backup.
   `uninstall.sh` removes it.
@@ -102,14 +115,31 @@ Omarchy plugins run unsandboxed, so here is everything this one does:
   `https://muse.ai/` in your main Chromium profile, it would land in the
   drawer too.
 - Chromium only.
+- Agents have to have a web app. Grok Bot, for one, is desktop and iOS only
+  for now.
 
 ## Adding an agent
 
-Add it to `extension/chats.js`, the URL to `APPS` in
-`hypr/agents-drawer.lua`, its host to `extension/manifest.json`,
-`host/agents-drawer-host.py` and the `app` case in `bin/agents-drawer`, and
-write `extension/sites/<name>.css` mapping its design tokens onto the
-`--om-*` variables in the generated `theme.css`.
+Any agent with a web app works. Put it in `~/.config/agents-drawer/agents.json`:
+
+```json
+[
+  { "id": "gemini", "name": "Gemini", "url": "https://gemini.google.com/app" }
+]
+```
+
+and run `agents-drawer build`. It shows up on the home page; click it and
+sign in. Entries with the id of a shipped agent replace it, and
+`{ "id": "tasks", "disabled": true }` hides one. Optional fields: `label`
+(the short name under the logo), `hosts` (extra domains the app lives on),
+`icon` (otherwise the site's own favicon, once it has loaded once) and
+`theme`.
+
+`theme` names a CSS file in `extension/sites/` that maps the site's own
+design tokens onto the `--om-*` variables in the generated `theme.css`; see
+`claude.css` and `muse.css`. Without one an agent gets the base skin. To add
+an agent for everyone, add it to `agents.json` in this repo and send a pull
+request.
 
 ## License
 

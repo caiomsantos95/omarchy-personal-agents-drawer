@@ -7,6 +7,8 @@
 #   ~/.local/share/agents-drawer/extension/   Chromium extension (home page,
 #                                             agent tabs, Omarchy theme cover)
 #   ~/.local/share/agents-drawer/host.py      native messaging host
+#   ~/.local/share/agents-drawer/agents.json  the agent list (add your own in
+#                                             ~/.config/agents-drawer/agents.json)
 #   ~/.local/share/agents-drawer/profile/     the drawer's own browser profile
 #   ~/.config/hypr/agents-drawer.lua          Hyprland module, required from
 #                                             hyprland.lua (backed up first)
@@ -31,15 +33,18 @@ python3 -c 'import tomllib' 2>/dev/null || die "needs Python 3.11 or newer"
 [[ -f $HYPR/hyprland.lua ]] || die "no $HYPR/hyprland.lua; this needs Omarchy's Lua Hyprland config"
 
 say "Installing files"
+[[ -x $BIN/agents-drawer ]] && "$BIN/agents-drawer" stop
 mkdir -p "$DATA" "$BIN"
 rm -rf "$DATA/extension.new"
 cp -r "$SRC/extension" "$DATA/extension.new"
 rm -rf "$DATA/extension"
 mv "$DATA/extension.new" "$DATA/extension"
 install -m 755 "$SRC/host/agents-drawer-host.py" "$DATA/host.py"
+install -m 644 "$SRC/agents.json" "$DATA/agents.json"
 install -m 755 "$SRC/bin/agents-drawer" "$BIN/agents-drawer"
 "$BIN/agents-drawer" register
 "$BIN/agents-drawer" theme
+"$BIN/agents-drawer" build
 
 say "Installing theme hooks"
 omarchy hook install theme-set "$SRC/hooks/agents-drawer-theme" >/dev/null

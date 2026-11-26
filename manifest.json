@@ -2,11 +2,13 @@
   "schemaVersion": 1,
   "id": "io.github.caiomsantos95.personal-agents-drawer",
   "name": "Personal Agents Drawer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "caiomsantos95",
   "license": "MIT",
-  "description": "Claude Duet and Muse in a pre-rendered drawer that slides in from the right edge, themed like the rest of Omarchy.",
-  "kinds": ["bar-widget"],
+  "description": "Your personal agents (Claude Duet, Muse, ChatGPT Dots, Google Tasks) in a pre-rendered drawer that slides in from the right edge, themed like the rest of Omarchy.",
+  "kinds": [
+    "bar-widget"
+  ],
   "entryPoints": {
     "barWidget": "BarWidget.qml"
   },

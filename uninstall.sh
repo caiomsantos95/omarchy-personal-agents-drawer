@@ -20,7 +20,7 @@ command -v hyprctl >/dev/null && hyprctl reload >/dev/null || true
 
 rm -f "$HOOKS/theme-set.d/agents-drawer-theme" "$HOOKS/font-set.d/agents-drawer-theme"
 rm -f "$BIN/agents-drawer"
-rm -rf "$DATA/extension" "$DATA/host.py"
+rm -rf "$DATA/extension" "$DATA/host.py" "$DATA/agents.json" "$DATA/agents.resolved.json" "$DATA/agents.lua" "$DATA/current" "$DATA/.extension-version"
 
 if [[ ${1:-} == --purge ]]; then
   rm -rf "$DATA"

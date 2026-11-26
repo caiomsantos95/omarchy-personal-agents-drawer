@@ -32,15 +32,16 @@ function render() {
     tile.setAttribute("role", "button");
     tile.setAttribute("aria-label", tile.title);
 
-    const img = document.createElement("img");
-    img.alt = "";
-    img.src = chat.icon;
-    img.onerror = () => {
-      const f = document.createElement("span");
-      f.className = "fallback";
-      f.textContent = chat.label[0];
-      img.replaceWith(f);
-    };
+    const img = document.createElement("span");
+    img.className = "fallback";
+    img.textContent = chat.label[0];
+    Icons.get(chat).then((src) => {
+      if (!src) return;
+      const logo = document.createElement("img");
+      logo.alt = "";
+      logo.src = src;
+      img.replaceWith(logo);
+    });
 
     const tag = document.createElement("span");
     tag.className = "tag";

@@ -1,4 +1,5 @@
--- Personal Agents Drawer: your agents' web apps (Claude Duet, Muse) as
+-- Personal Agents Drawer: your agents' web apps (Claude Duet, Muse, ChatGPT
+-- Dots, Google Tasks, or any you add to agents.json) as
 -- pre-rendered browser windows in a drawer that slides in from the right edge
 -- over any workspace, without retiling what is underneath.
 --
@@ -20,12 +21,21 @@ local M = agents_drawer
 local NAME = "agents"
 local WS = "special:" .. NAME
 
--- Chromium names an --app window's Wayland app id after its URL.
-local APPS = {
-  home = { class = "chrome-agents-drawer.invalid__-Default" },
-  duet = { class = "chrome-claude.ai__duet-Default", url = "https://claude.ai/duet" },
-  muse = { class = "chrome-muse.ai__-Default", url = "https://muse.ai/" },
-}
+local HOME = os.getenv("HOME") or ""
+local DATA = (os.getenv("XDG_DATA_HOME") or (HOME .. "/.local/share")) .. "/agents-drawer"
+
+-- Chromium names an --app window's Wayland app id after its URL. The home
+-- window's is fixed; the agents' come from agents.lua, which
+-- `agents-drawer build` generates from agents.json.
+local APPS = { home = { class = "chrome-agents-drawer.invalid__-Default" } }
+local ok, agents = pcall(dofile, DATA .. "/agents.lua")
+if ok and type(agents) == "table" then
+  for _, a in ipairs(agents) do
+    if type(a.id) == "string" and a.id:match("^[a-z0-9][a-z0-9-]*$") and type(a.class) == "string" then
+      APPS[a.id] = { class = a.class }
+    end
+  end
+end
 
 local KEY = "SUPER + D"
 local SHARE = 0.34 -- of the monitor's usable width
@@ -37,9 +47,31 @@ local HEADER_GAP = 4
 local EDGE_TICK_MS = 75
 local EDGE_DWELL_MS = 450
 
-local LAUNCHER = (os.getenv("HOME") or "") .. "/.local/bin/agents-drawer"
+local LAUNCHER = HOME .. "/.local/bin/agents-drawer"
 
-M.current = M.current or "home"
+-- Which window is showing survives Hyprland config reloads (which start a
+-- fresh Lua state) so it stays in step with the header the extension draws.
+local STATE = DATA .. "/current"
+
+local function remembered()
+  local f = io.open(STATE, "r")
+  if not f then
+    return nil
+  end
+  local id = f:read("l")
+  f:close()
+  return id and APPS[id] and id or nil
+end
+
+local function remember(id)
+  local f = io.open(STATE, "w")
+  if f then
+    f:write(id, "\n")
+    f:close()
+  end
+end
+
+M.current = M.current or remembered() or "home"
 M.launching = M.launching or {}
 
 local function escape(s)
@@ -158,7 +190,7 @@ function M.ensure(id)
   if id == "home" then
     hl.exec_cmd(LAUNCHER .. " start")
   else
-    hl.exec_cmd(LAUNCHER .. " app " .. o.shell_quote(app.url))
+    hl.exec_cmd(LAUNCHER .. " app " .. o.shell_quote(id))
   end
   M.launching[id] = true
   hl.timer(function()
@@ -171,6 +203,7 @@ function M.show(id)
     return
   end
   M.current = id
+  remember(id)
   M.ensure(id)
   M.layout()
   front()

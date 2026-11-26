@@ -28,11 +28,15 @@ function mountTabbar(host, cssText) {
     b.title = hint;
     const face = el("span", "face");
     if (icon) {
-      const img = el("img");
-      img.alt = "";
-      img.src = icon;
-      img.onerror = () => img.replaceWith(el("span", "glyph", label[0]));
-      face.append(img);
+      const initial = el("span", "glyph", label[0]);
+      face.append(initial);
+      Icons.get(icon).then((src) => {
+        if (!src) return;
+        const img = el("img");
+        img.alt = "";
+        img.src = src;
+        initial.replaceWith(img);
+      });
     } else {
       face.append(el("span", "glyph", glyph));
     }
@@ -57,7 +61,7 @@ function mountTabbar(host, cssText) {
       row.append(
         tile({
           label: c.label,
-          icon: c.icon,
+          icon: c,
           active: state.current === c.id,
           hint: `${c.name} (Alt+${i + 1})`,
           onClick: () => send({ type: "open", id: c.id }),

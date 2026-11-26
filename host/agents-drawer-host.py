@@ -6,12 +6,24 @@
 # side (agents_drawer in ~/.config/hypr/agents-drawer.lua) and exits. Nothing
 # from the message is ever passed through unchecked.
 import json
+import os
 import struct
 import subprocess
 import sys
 
 COMMANDS = {"show", "ensure", "hide", "close"}
-APPS = {"home", "duet", "muse"}
+
+
+def agents():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "agents.resolved.json")
+    try:
+        with open(path) as f:
+            return {a["id"] for a in json.load(f)}
+    except (OSError, ValueError, KeyError, TypeError):
+        return set()
+
+
+APPS = {"home"} | agents()
 
 
 def read():
