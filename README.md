@@ -8,12 +8,17 @@ personal agents, already loaded and signed in, restyled to look like the rest
 of your Omarchy desktop: your theme's colors, your monospace font, square
 corners. Switch themes and the drawer follows.
 
-| Agent | Web app | Theme |
-| --- | --- | --- |
-| [Claude Duet](https://claude.ai/duet) | `claude.ai/duet` | full |
-| [Muse](https://muse.ai) | `muse.ai` | full |
-| [ChatGPT Dots](https://openai.com/index/introducing-dots/) | `chatgpt.com/dots` | base skin |
-| [Google Tasks](https://tasks.google.com) | `tasks.google.com` | base skin |
+| Agent | Web app | Theme | Status |
+| --- | --- | --- | --- |
+| [Claude Duet](https://claude.ai/duet) | `claude.ai/duet` | full | tested |
+| [Muse](https://muse.ai) | `muse.ai` | full | tested |
+| [ChatGPT Dots](https://openai.com/index/introducing-dots/) | `chatgpt.com/dots` | base skin | **untested** |
+
+> **ChatGPT Dots is untested.** It was added from public information (Dots
+> needs a ChatGPT Pro or Business Premium plan) and the author has no
+> account: its window opens and docks correctly, but nobody has used it past
+> the sign-in page here, and it only gets the base skin. If you use Dots, an
+> issue or pull request with what works (and a site theme) is very welcome.
 
 Turn agents on and off from the drawer's home page (**+ Add**), and add your
 own in one line (see [Adding an agent](#adding-an-agent)). "Base skin" means
@@ -130,7 +135,7 @@ Any agent with a web app works. Put it in `~/.config/agents-drawer/agents.json`:
 
 and run `agents-drawer build`. It shows up on the home page; click it and
 sign in. Entries with the id of a shipped agent replace it, and
-`{ "id": "tasks", "disabled": true }` hides one. Optional fields: `label`
+`{ "id": "dots", "disabled": true }` hides one. Optional fields: `label`
 (the short name under the logo), `hosts` (extra domains the app lives on),
 `icon` (otherwise the site's own favicon, once it has loaded once) and
 `theme`.

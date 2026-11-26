@@ -24,11 +24,5 @@
     "name": "ChatGPT Dots",
     "label": "Dots",
     "url": "https://chatgpt.com/dots"
-  },
-  {
-    "id": "tasks",
-    "name": "Google Tasks",
-    "label": "Tasks",
-    "url": "https://tasks.google.com/"
   }
 ]

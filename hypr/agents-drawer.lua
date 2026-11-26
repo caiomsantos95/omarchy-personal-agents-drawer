@@ -1,5 +1,5 @@
 -- Personal Agents Drawer: your agents' web apps (Claude Duet, Muse, ChatGPT
--- Dots, Google Tasks, or any you add to agents.json) as
+-- Dots, or any you add to agents.json) as
 -- pre-rendered browser windows in a drawer that slides in from the right edge
 -- over any workspace, without retiling what is underneath.
 --

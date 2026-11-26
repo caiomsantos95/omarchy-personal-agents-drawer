@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Personal Agents Drawer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Home page, agent tabs and an Omarchy-themed terminal cover for the Personal Agents Drawer. Site permissions are generated from agents.json by `agents-drawer build`.",
   "background": {
     "service_worker": "sw.js"

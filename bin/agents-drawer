@@ -1,7 +1,7 @@
 #!/bin/bash
 # agents-drawer: launcher for Personal Agents Drawer.
 #
-# Your agents' web apps (Claude Duet, Muse, ChatGPT Dots, Google Tasks, ...)
+# Your agents' web apps (Claude Duet, Muse, ChatGPT Dots, ...)
 # run as pre-rendered Chromium app windows in their own browser profile,
 # stacked by Hyprland in the special:agents workspace, which slides in from
 # the right edge over any workspace. Hyprland side:
