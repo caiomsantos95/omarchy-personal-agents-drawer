@@ -5,7 +5,7 @@
   "version": "0.3.0",
   "author": "caiomsantos95",
   "license": "MIT",
-  "description": "Your personal agents (Claude Duet, Muse, ChatGPT Dots) in a pre-rendered drawer that slides in from the right edge, themed like the rest of Omarchy.",
+  "description": "Your personal agents, always one shortcut away: Claude Duet, Muse and ChatGPT Dots in a drawer that slides in from the right edge, pre-loaded and dressed in your Omarchy theme.",
   "kinds": [
     "service",
     "bar-widget"

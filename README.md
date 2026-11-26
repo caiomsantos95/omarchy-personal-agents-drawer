@@ -2,13 +2,26 @@
 
 [Omarchy plugin marketplace](https://plugins.omarchy.org/plugin.html?id=io.github.caiomsantos95.personal-agents-drawer)
 
-Your personal agents, one keystroke away on [Omarchy](https://omarchy.org).
+**Your personal agents, always at hand in [Omarchy](https://omarchy.org), one
+shortcut away and looking like they shipped with the OS.**
 
-A drawer slides in from the right edge of the screen, over whatever you are
-doing, without retiling your windows. Inside are the web apps of your
-personal agents, already loaded and signed in, restyled to look like the rest
-of your Omarchy desktop: your theme's colors, your monospace font, square
-corners. Switch themes and the drawer follows.
+Press `Super + D`, or rest the pointer on the right edge of the screen, and a
+drawer slides in over whatever you are doing with Claude Duet, Muse or
+ChatGPT Dots already loaded and signed in. Click away and it's gone. Your
+windows never move.
+
+- **Always handy.** Works from any workspace. Every agent runs in a hidden
+  window from login, so opening the drawer or switching agents never reloads
+  a page: you pick up mid-thought.
+- **Consistent with the rest of your desktop.** Each agent is restyled with
+  your Omarchy theme's colors, your monospace font and square corners.
+  Switch themes and the drawer follows.
+- **One command to install.** `omarchy plugin add … --enable` and you're done:
+  no config files to edit, nothing added to `hyprland.lua`.
+
+![Claude Duet open in the drawer, wearing the Omarchy theme](docs/conversation.png)
+
+<sub>A mockup of the drawer over a workspace, built from the drawer's own theme and header styles; the conversation is illustrative.</sub>
 
 | Agent | Web app | Theme | Status |
 | --- | --- | --- | --- |
@@ -27,11 +40,7 @@ own in one line (see [Adding an agent](#adding-an-agent)). "Base skin" means
 your font, background and square corners; a full theme also maps the site's
 own colors.
 
-![Personal Agents Drawer](preview.png)
-
-![Claude Duet open in the drawer, wearing the Omarchy theme](docs/conversation.png)
-
-<sub>A mockup of the drawer over a workspace, built from the drawer's own theme and header styles; the conversation is illustrative.</sub>
+![The drawer's home page, where you turn agents on and off](preview.png)
 
 - **`Super + D`** toggles the drawer. So does the `◆` button in the bar.
 - **Rest the pointer on the right edge** of a screen for half a second to open it.
