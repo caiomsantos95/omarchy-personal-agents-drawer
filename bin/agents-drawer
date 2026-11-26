@@ -180,7 +180,7 @@ for a in agents:
         sys.exit(f"agents.json: {aid}: bad host in hosts")
     theme = a.get("theme")
     if theme and not re.fullmatch(r"[a-z0-9-]+\.css", theme):
-        sys.exit(f"agents.json: {aid}: theme must be a file name in extension/sites/")
+        sys.exit(f"agents.json: {aid}: theme must be a file name in browser/extension/sites/")
     resolved.append({
         "id": aid,
         "name": str(a.get("name", aid))[:40],

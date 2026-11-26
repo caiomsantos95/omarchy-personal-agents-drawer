@@ -80,7 +80,7 @@ omarchy plugin remove io.github.caiomsantos95.personal-agents-drawer
   a native messaging host to Hyprland, which raises that agent's window.
 - **Theme.** `agents-drawer theme` turns the current theme's `colors.toml`
   and monospace font into CSS variables. The extension injects them into each
-  agent's page with a small per-site file (`extension/sites/`) that maps the
+  agent's page with a small per-site file (`browser/extension/sites/`) that maps the
   site's own design tokens onto them. Omarchy's theme and font hooks rerun it,
   and the pages pick the change up within a few seconds.
 - **Edge and clicks.** A 75 ms timer inside Hyprland watches for the pointer
@@ -114,7 +114,7 @@ Omarchy plugins run unsandboxed, so here is everything this one does:
 
 - The site themes map each site's CSS variables. When a site changes its
   design system, parts of the theme can fall back to the site's own colors
-  until `extension/sites/` is updated.
+  until `browser/extension/sites/` is updated.
 - The drawer recognizes its windows by Chromium's app ids for these exact
   URLs. If you also made a web app for `https://claude.ai/duet` or
   `https://muse.ai/` in your main Chromium profile, it would land in the
@@ -140,7 +140,7 @@ sign in. Entries with the id of a shipped agent replace it, and
 `icon` (otherwise the site's own favicon, once it has loaded once) and
 `theme`.
 
-`theme` names a CSS file in `extension/sites/` that maps the site's own
+`theme` names a CSS file in `browser/extension/sites/` that maps the site's own
 design tokens onto the `--om-*` variables in the generated `theme.css`; see
 `claude.css` and `muse.css`. Without one an agent gets the base skin. To add
 an agent for everyone, add it to `agents.json` in this repo and send a pull

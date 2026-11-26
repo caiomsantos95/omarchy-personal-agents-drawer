@@ -36,7 +36,7 @@ say "Installing files"
 [[ -x $BIN/agents-drawer ]] && "$BIN/agents-drawer" stop
 mkdir -p "$DATA" "$BIN"
 rm -rf "$DATA/extension.new"
-cp -r "$SRC/extension" "$DATA/extension.new"
+cp -r "$SRC/browser/extension" "$DATA/extension.new"
 rm -rf "$DATA/extension"
 mv "$DATA/extension.new" "$DATA/extension"
 install -m 755 "$SRC/host/agents-drawer-host.py" "$DATA/host.py"
